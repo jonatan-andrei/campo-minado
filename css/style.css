@@ -1,7 +1,12 @@
-table {
-    width:100%
+body{
+    background-color: #DCDCDC;
 }
 
 .esconder {
     display: none; 
+}
+
+.celula {
+    width: 55px;
+    height: 55px;
 }
