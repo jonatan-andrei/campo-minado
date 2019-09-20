@@ -37,3 +37,11 @@ class Nivel {
     }
 }
 
+class CampoMinado {
+    constructor (nivel, cor, vidas){
+        this.nivel = nivel;
+        this.cor = cor;
+        this.vidas = vidas;
+    }
+}
+
