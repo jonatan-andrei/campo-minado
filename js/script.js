@@ -14,11 +14,14 @@ function iniciarJogo() {
     var cor = document.getElementById('cor').value;
     var vida = document.getElementById('vidas').value;
     if (jogoIniciado) {
-        // Criar lógica para apagar tabela existente
-    } else {
-        criarCampoMinado(nivel, cor, vida);
-        jogoIniciado = true;
+        document.getElementById('tabuleiro').remove();
     }
+    criarCampoMinado(nivel, cor, vida);
+    jogoIniciado = true;
+}
+
+function continuarJogo() {
+    // TODO criar funcionalidade
 }
 
 function retornarMenuPrincipal() {
@@ -28,34 +31,67 @@ function retornarMenuPrincipal() {
 }
 
 function jogar(posicaoJogada) {
-    // Bloqueia jogada simultânea
+    // TODO Bloqueia jogada simultânea
     if (!campoMinado.tabuleiro[posicaoJogada].aberta && !bloqueiaTabuleiroFimDeJogo) {
         var jogadaValida = true;
         campoMinado.tabuleiro[posicaoJogada].aberta = true;
         if (primeiraJogada) {
-            campoMinado.celulasSemBombaReveladas++;
             posicionarBombas(posicaoJogada);
             primeiraJogada = false;
+            exibirBombasProximasCodigo(posicaoJogada);
         } else {
             if (campoMinado.tabuleiro[posicaoJogada].bomba) {
                 jogadaValida = false;
-                // Revela bomba e faz verificação se tem vidas
-                // se não tem mais vidas bloqueiaTabuleiroFimDeJogo = true;
-                // Notifica que usuário perdeu
+                campoMinado.vidasRestantes--;
+                var td = document.getElementById(posicaoJogada);
+                td.append("B"); // TODO Adicionar imagem de bomba
+                if (campoMinado.vidasRestantes === 0) {
+                    bloqueiaTabuleiroFimDeJogo = true;
+                    alert("Você perdeu! Clique em reiniciar jogo para jogar novamente.");
+                }
             } else {
-                campoMinado.celulasSemBombaReveladas++;
-                // Revela número
+                exibirBombasProximasCodigo(posicaoJogada);
             }
         }
-        // Revela casas próximas sem bomba
         if (jogadaValida) {
+            if (campoMinado.tabuleiro[posicaoJogada].bombasProximas === 0) {
+                abrirCasasProximasDeCelula(campoMinado.tabuleiro[posicaoJogada]);
+            }
             if (campoMinado.celulasSemBombaReveladas === campoMinado.nivel.celulasSemBomba) {
-                // Jogo acabou e existe vencedor
                 bloqueiaTabuleiroFimDeJogo = true;
+                alert("Parabéns! Você venceu o jogo! Clique em reiniciar jogo para jogar novamente.");
             }
         }
     }
-    // Desbloqueia jogada
+    // TODO Desbloqueia jogada simultânea
+}
+
+function abrirCasasProximasDeCelula(celula) {
+    exibirBombasProximasLinhaColuna(celula.linha, celula.coluna + 1);
+    exibirBombasProximasLinhaColuna(celula.linha, celula.coluna - 1);
+    exibirBombasProximasLinhaColuna(celula.linha + 1, celula.coluna);
+    exibirBombasProximasLinhaColuna(celula.linha + 1, celula.coluna + 1);
+    exibirBombasProximasLinhaColuna(celula.linha + 1, celula.coluna - 1);
+    exibirBombasProximasLinhaColuna(celula.linha - 1, celula.coluna);
+    exibirBombasProximasLinhaColuna(celula.linha - 1, celula.coluna + 1);
+    exibirBombasProximasLinhaColuna(celula.linha - 1, celula.coluna - 1);
+}
+
+function exibirBombasProximasLinhaColuna(linha, coluna) {
+    var celula = buscarCelulaPorPosicao(linha, coluna);
+    if (celula && !celula.aberta) {
+        celula.aberta = true;
+        exibirBombasProximasCodigo(celula.codigo);
+        if (celula.bombasProximas === 0) {
+            abrirCasasProximasDeCelula(celula);
+        }
+    }
+}
+
+function exibirBombasProximasCodigo(codigo) {
+    campoMinado.celulasSemBombaReveladas++;
+    var td = document.getElementById(codigo);
+    td.append(document.createTextNode(campoMinado.tabuleiro[codigo].bombasProximas)); // TODO Não exibir 0
 }
 
 function posicionarBombas(posicaoJogada) {
@@ -65,152 +101,43 @@ function posicionarBombas(posicaoJogada) {
     }
     for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
         if (!(posicoesBombas.includes(campoMinado.tabuleiro[i].codigo))) {
-            var bombasProximas = calcularBombasProximasPosicao(campoMinado.tabuleiro[i]);
+            var bombasProximas = calcularBombasProximasCelula(campoMinado.tabuleiro[i]);
             campoMinado.tabuleiro[i].bombasProximas = bombasProximas;
         }
     }
 }
 
-function calcularBombasProximasPosicao(celula) {
+function calcularBombasProximasCelula(celula) {
     var bombasProximas = 0;
-    if (celula.linha === 1) {
-        if (celula.coluna === 1) {
-            if (buscarCelulaPorPosicao(1, 2).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, 2).bomba) {
-                bombasProximas++;
-            }
-        } else if (campoMinado.nivel.colunas === celula.coluna) {
-            if (buscarCelulaPorPosicao(1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-        } else {
-            if (buscarCelulaPorPosicao(1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(2, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-        }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha, celula.coluna + 1))) {
+        bombasProximas++;
     }
-    else if (campoMinado.nivel.linhas === celula.linha) {
-        if (celula.coluna === 1) {
-            if (buscarCelulaPorPosicao(celula.linha, 2).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, 2).bomba) {
-                bombasProximas++;
-            }
-        } else if (campoMinado.nivel.colunas === celula.coluna) {
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-        } else {
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-        }
-    } else {
-        if (celula.coluna === 1) {
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-        } else if (campoMinado.nivel.colunas === celula.coluna) {
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-        } else {
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
-                bombasProximas++;
-            }
-            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
-                bombasProximas++;
-            }
-        }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha, celula.coluna - 1))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha + 1, celula.coluna))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha + 1, celula.coluna + 1))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha + 1, celula.coluna - 1))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha - 1, celula.coluna))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1))) {
+        bombasProximas++;
+    }
+    if (verificarBomba(buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1))) {
+        bombasProximas++;
     }
     return bombasProximas;
+}
+
+function verificarBomba(celula) {
+    return celula && celula.bomba;
 }
 
 function buscarCelulaPorPosicao(linha, coluna) {
@@ -220,6 +147,7 @@ function buscarCelulaPorPosicao(linha, coluna) {
             return campoMinado.tabuleiro[i];
         }
     }
+    return null;
 }
 
 function sortearPosicoesComBombas(posicaoJogada) {
@@ -249,15 +177,15 @@ function criarNivel(codigo) {
         return new Nivel(7, 7, 7, 5, false);
     }
     else if (codigo === 'MEDIO') {
-        return new Nivel(10, 10, 10, 0, false);
+        return new Nivel(10, 10, 10, 1, false);
     }
     else { // DIFICIL
-        return new Nivel(15, 15, 15, 0, false);
+        return new Nivel(15, 15, 15, 1, false);
     }
 }
 
 function criarCampoMinado(nivel, cor, vidas) {
-    var areaJogo = document.getElementById('area-jogo');
+    var areaTabuleiro = document.getElementById('espaco-tabuleiro');
     var tabela = document.createElement('table');
     tabela.setAttribute('border', '1');
     var tbody = document.createElement('tbody');
@@ -281,7 +209,7 @@ function criarCampoMinado(nivel, cor, vidas) {
     }
     tabela.appendChild(tbody);
     tabela.setAttribute('id', 'tabuleiro');
-    areaJogo.appendChild(tabela);
+    areaTabuleiro.appendChild(tabela);
 }
 
 
@@ -290,7 +218,7 @@ class Nivel {
         this.linhas = linhas;
         this.colunas = colunas;
         this.bombas = bombas;
-        this.dicas = dicas;
+        this.dicas = dicas; // TODO implementar dicas
         this.personalizado = personalizado;
         this.celulasSemBomba = (linhas * colunas) - bombas;
     }
@@ -300,9 +228,10 @@ class CampoMinado {
     constructor(nivel, cor, vidas, tabuleiro) {
         this.nivel = nivel;
         this.cor = cor;
-        this.vidas = vidas;
+        this.vidas = vidas || 1;
         this.tabuleiro = tabuleiro;
         this.celulasSemBombaReveladas = 0;
+        this.vidasRestantes = vidas || 1;
     }
 }
 
@@ -316,4 +245,3 @@ class Celula {
         this.aberta = aberta;
     }
 }
-
