@@ -41,6 +41,7 @@ function jogar(posicaoJogada) {
                 jogadaValida = false;
                 // Revela bomba e faz verificação se tem vidas
                 // se não tem mais vidas bloqueiaTabuleiroFimDeJogo = true;
+                // Notifica que usuário perdeu
             } else {
                 campoMinado.celulasSemBombaReveladas++;
                 // Revela número
@@ -60,12 +61,85 @@ function jogar(posicaoJogada) {
 function posicionarBombas(posicaoJogada) {
     var posicoesBombas = sortearPosicoesComBombas(posicaoJogada);
     for (var i = 0; i < posicoesBombas.length; i++) {
-        campoMinado.tabuleiro[posicionarBombas[i] - 1].bomba = true;
+        campoMinado.tabuleiro[posicoesBombas[i] - 1].bomba = true;
     }
     for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
-        // if celula não está em posicoes bombas, calcula bombas próximas
+        if (!(posicoesBombas.includes(campoMinado.tabuleiro[i].codigo))) {
+            var bombasProximas = calcularBombasProximasPosicao(campoMinado.tabuleiro[i]);
+            campoMinado.tabuleiro[i].bombasProximas = bombasProximas;
+        }
     }
     console.log(posicoesBombas);
+}
+
+function calcularBombasProximasPosicao(celula) {
+    var bombasProximas = 0;
+    if (celula.linha === 1) {
+        if (celula.coluna === 1) {
+            if (buscarCelulaPorPosicao(1, 2).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, 2).bomba) {
+                bombasProximas++;
+            }
+        } else if (campoMinado.nivel.colunas === celula.coluna) {
+            if (buscarCelulaPorPosicao(1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+        } else {
+            if (buscarCelulaPorPosicao(1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(2, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+        }
+    }
+    else if (campoMinado.nivel.linhas === celula.linha) {
+        if (celula.coluna === 1) {
+
+        } else if (campoMinado.nivel.colunas === celula.coluna) {
+
+        } else {
+
+        }
+    } else {
+        if (celula.coluna === 1) {
+
+        } else if (campoMinado.nivel.colunas === celula.coluna) {
+
+        } else {
+
+        }
+    }
+    return bombasProximas;
+}
+
+function buscarCelulaPorPosicao(linha, coluna) {
+    // TODO verificar maneira melhor de fazer essa busca
+    for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
+        if (campoMinado.tabuleiro[i].linha === linha && campoMinado.tabuleiro[i].coluna === coluna) {
+            return campoMinado.tabuleiro[i];
+        }
+    }
 }
 
 function sortearPosicoesComBombas(posicaoJogada) {
