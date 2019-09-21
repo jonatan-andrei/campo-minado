@@ -29,15 +29,15 @@ function retornarMenuPrincipal() {
 
 function jogar(posicaoJogada) {
     // Bloqueia jogada simultânea
-    if (!campoMinado.tabuleiro[posicaoJogada - 1].aberta && !bloqueiaTabuleiroFimDeJogo) {
+    if (!campoMinado.tabuleiro[posicaoJogada].aberta && !bloqueiaTabuleiroFimDeJogo) {
         var jogadaValida = true;
-        campoMinado.tabuleiro[posicaoJogada - 1].aberta = true;
+        campoMinado.tabuleiro[posicaoJogada].aberta = true;
         if (primeiraJogada) {
             campoMinado.celulasSemBombaReveladas++;
             posicionarBombas(posicaoJogada);
             primeiraJogada = false;
         } else {
-            if (campoMinado.tabuleiro[posicaoJogada - 1].bomba) {
+            if (campoMinado.tabuleiro[posicaoJogada].bomba) {
                 jogadaValida = false;
                 // Revela bomba e faz verificação se tem vidas
                 // se não tem mais vidas bloqueiaTabuleiroFimDeJogo = true;
@@ -61,7 +61,7 @@ function jogar(posicaoJogada) {
 function posicionarBombas(posicaoJogada) {
     var posicoesBombas = sortearPosicoesComBombas(posicaoJogada);
     for (var i = 0; i < posicoesBombas.length; i++) {
-        campoMinado.tabuleiro[posicoesBombas[i] - 1].bomba = true;
+        campoMinado.tabuleiro[posicoesBombas[i]].bomba = true;
     }
     for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
         if (!(posicoesBombas.includes(campoMinado.tabuleiro[i].codigo))) {
@@ -69,7 +69,9 @@ function posicionarBombas(posicaoJogada) {
             campoMinado.tabuleiro[i].bombasProximas = bombasProximas;
         }
     }
-    console.log(posicoesBombas);
+    for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
+        console.log(campoMinado.tabuleiro[i]);
+    }
 }
 
 function calcularBombasProximasPosicao(celula) {
@@ -115,11 +117,41 @@ function calcularBombasProximasPosicao(celula) {
     }
     else if (campoMinado.nivel.linhas === celula.linha) {
         if (celula.coluna === 1) {
-
+            if (buscarCelulaPorPosicao(celula.linha, 2).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, 2).bomba) {
+                bombasProximas++;
+            }
         } else if (campoMinado.nivel.colunas === celula.coluna) {
-
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
         } else {
-
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
         }
     } else {
         if (celula.coluna === 1) {
@@ -187,13 +219,13 @@ function criarCampoMinado(nivel, cor, vidas) {
         var tr = document.createElement('tr');
         for (var j = 1; j <= nivel.colunas; j++) {
             var td = document.createElement('td');
+            campoMinado.tabuleiro[contador] = new Celula(contador, 0, i, j, false, false);
             td.setAttribute('id', contador);
             td.setAttribute('class', 'celula');
             td.onclick = function () {
-                jogar(contador);
+                jogar(parseInt(this.id));
             }
             tr.appendChild(td);
-            campoMinado.tabuleiro[contador] = new Celula(contador, 0, i, j, false, false);
             contador++;
 
         }
