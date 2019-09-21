@@ -63,14 +63,11 @@ function posicionarBombas(posicaoJogada) {
     for (var i = 0; i < posicoesBombas.length; i++) {
         campoMinado.tabuleiro[posicoesBombas[i]].bomba = true;
     }
-    for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
+    for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
         if (!(posicoesBombas.includes(campoMinado.tabuleiro[i].codigo))) {
             var bombasProximas = calcularBombasProximasPosicao(campoMinado.tabuleiro[i]);
             campoMinado.tabuleiro[i].bombasProximas = bombasProximas;
         }
-    }
-    for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
-        console.log(campoMinado.tabuleiro[i]);
     }
 }
 
@@ -155,11 +152,62 @@ function calcularBombasProximasPosicao(celula) {
         }
     } else {
         if (celula.coluna === 1) {
-
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
         } else if (campoMinado.nivel.colunas === celula.coluna) {
-
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
         } else {
-
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha + 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna + 1).bomba) {
+                bombasProximas++;
+            }
+            if (buscarCelulaPorPosicao(celula.linha - 1, celula.coluna - 1).bomba) {
+                bombasProximas++;
+            }
         }
     }
     return bombasProximas;
@@ -167,7 +215,7 @@ function calcularBombasProximasPosicao(celula) {
 
 function buscarCelulaPorPosicao(linha, coluna) {
     // TODO verificar maneira melhor de fazer essa busca
-    for (var i = 0; i < campoMinado.tabuleiro.length; i++) {
+    for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
         if (campoMinado.tabuleiro[i].linha === linha && campoMinado.tabuleiro[i].coluna === coluna) {
             return campoMinado.tabuleiro[i];
         }
