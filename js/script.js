@@ -56,7 +56,6 @@ function jogar(posicaoJogada) {
         if (jogadaValida) {
             if (campoMinado.tabuleiro[posicaoJogada].bombasProximas === 0) {
                 abrirCasasProximasDeCelula(campoMinado.tabuleiro[posicaoJogada]);
-                // TODO Revela casas próximas sem bomba. Não esquecer de atualizar campoMinado.celulasSemBombaReveladas
             }
             if (campoMinado.celulasSemBombaReveladas === campoMinado.nivel.celulasSemBomba) {
                 bloqueiaTabuleiroFimDeJogo = true;
@@ -173,7 +172,7 @@ function sortearNumero() {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function criarNivel(codigo, vidas) {
+function criarNivel(codigo) {
     if (codigo === 'FACIL') {
         return new Nivel(7, 7, 7, 5, false);
     }
