@@ -25,6 +25,7 @@ function iniciarJogo() {
     } else {
         document.getElementById('tabuleiro').remove();
         textoSalvarJogo.nodeValue = "Salvar jogo";
+        // Desbloquear botão desistir
     }
     criarCampoMinado(nivel, cor, vida);
     jogoIniciado = true;
@@ -77,7 +78,7 @@ function jogar(posicaoJogada) {
     // TODO Desbloqueia jogada simultânea
 }
 
-function desistir () {
+function desistir() {
     finalizarJogo(false, true);
 }
 
@@ -86,7 +87,8 @@ function finalizarJogo(vencedor, desistencia) {
     bloqueiaTabuleiroFimDeJogo = true;
     jogoIniciado = false;
     textoSalvarJogo.nodeValue = "Voltar a página inicial";
-    
+    // Bloquear botão desistir
+
     if (desistencia) {
         document.getElementById('area-jogo').classList.add('esconder');
         document.getElementById('area-menu-inicial').classList.remove('esconder');
@@ -96,7 +98,6 @@ function finalizarJogo(vencedor, desistencia) {
     } else {
         alert("Você perdeu! Clique em reiniciar jogo para jogar novamente.");
     }
-
 }
 
 function abrirCasasProximasDeCelula(celula) {
@@ -215,13 +216,13 @@ function sortearNumero() {
 
 function criarNivel(codigo) {
     if (codigo === 'FACIL') {
-        return new Nivel(7, 7, 7, 5, false);
+        return new Nivel(10, 10, 10, 5, false);
     }
     else if (codigo === 'MEDIO') {
-        return new Nivel(10, 10, 13, 1, false);
+        return new Nivel(15, 15, 20, 1, false);
     }
     else { // DIFICIL
-        return new Nivel(15, 15, 30, 1, false);
+        return new Nivel(20, 20, 30, 1, false);
     }
 }
 
