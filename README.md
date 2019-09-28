@@ -36,7 +36,10 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Criar estilo da página de tabuleiro;
 - Criar tabuleiro personalizado (linhas, colunas e bombas);
 - Escolher imagem de fundo;
-- Efeito de explosão.
+- Efeito de explosão;
+- Melhorar cores personalizadas;
+- Exibir contagem de casas que faltam ser abertas;
+- Alterar cor de células abertas para ser diferente do fundo.
 
 ## Bugs a corrigir:
 Sem bugs conhecidos no momento.

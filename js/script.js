@@ -222,7 +222,7 @@ function criarNivel(codigo) {
         return new Nivel(15, 15, 20, 1, false);
     }
     else { // DIFICIL
-        return new Nivel(20, 20, 30, 1, false);
+        return new Nivel(20, 20, 40, 1, false);
     }
 }
 
