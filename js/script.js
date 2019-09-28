@@ -6,6 +6,7 @@ var campoMinado = null;
 var bloqueiaTabuleiroFimDeJogo = false;
 
 function iniciarJogo() {
+    primeiraJogada = true;
     exibeTabuleiro = true;
     bloqueiaTabuleiroFimDeJogo = false;
     document.getElementById('area-menu-inicial').classList.add('esconder');
