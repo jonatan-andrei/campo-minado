@@ -21,20 +21,29 @@
             <option value="DIFICIL">Difícil</option>
         </select>
         <span>Vidas: </span>
-        <input type="number" id="vidas" min="0" max="3">
+        <select id="vidas">
+            <option value="1" selected="selected">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
         <span>Cor: </span>
         <select id="cor">
-            <option value="AZUL" selected="selected">Azul</option>
-            <option value="VERDE">Verde</option>
-            <option value="VERMELHO">Vermelho</option>
+            <option value="azul" selected="selected">Azul</option>
+            <option value="verde">Verde</option>
+            <option value="vermelho">Vermelho</option>
+            <option value="laranja">Laranja</option>
         </select>
         <button onclick="iniciarJogo()">
             Iniciar jogo
         </button>
+        <button id="botao-continuar" class="esconder" onclick="continuarJogo()">
+            Continuar jogo
+        </button>
     </div>
     <div id="area-jogo" class="esconder">
         <div id="espaco-tabuleiro"></div>
-        <button onclick="retornarMenuPrincipal()">Retornar ao menu</button>
+        <button id="botao-salvar" onclick="salvarJogo()"></button>
+        <button onclick="desistir()">Desistir</button>
     </div>
 </body>
 

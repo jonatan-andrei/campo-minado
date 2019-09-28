@@ -22,3 +22,9 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Escolher tamanho do tabuleiro (casas laterais e horizontais);
 - Escolher número de bombas;
 - Escolher “nível” de dificuldade.
+
+## Funcionalidades "pendentes" (a fazer):
+- Separar classes de script principal
+- Adicionar imagem de bomba
+- Adicionar animação para explodir bombas e adicionar depois aviso
+- Criar confirmação para iniciar jogo caso tenha outro jogo iniciado

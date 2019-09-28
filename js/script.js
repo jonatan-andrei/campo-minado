@@ -1,11 +1,15 @@
 // Variáveis globais utilizadas para controles de exibição e do jogo
 var jogoIniciado = false;
+var primeiroJogo = true;
 var exibeTabuleiro = false;
 var primeiraJogada = true;
 var campoMinado = null;
 var bloqueiaTabuleiroFimDeJogo = false;
+var corCelulas = 'azul';
+var textoSalvarJogo = document.createTextNode("Salvar jogo");
 
 function iniciarJogo() {
+    document.getElementById('botao-continuar').classList.remove('esconder');
     primeiraJogada = true;
     exibeTabuleiro = true;
     bloqueiaTabuleiroFimDeJogo = false;
@@ -14,18 +18,25 @@ function iniciarJogo() {
     var nivel = criarNivel(document.getElementById('nivel').value);
     var cor = document.getElementById('cor').value;
     var vida = document.getElementById('vidas').value;
-    if (jogoIniciado) {
+    if (primeiroJogo) {
+        var botaoSalvar = document.getElementById('botao-salvar');
+        botaoSalvar.append(textoSalvarJogo);
+        primeiroJogo = false;
+    } else {
         document.getElementById('tabuleiro').remove();
+        textoSalvarJogo.nodeValue = "Salvar jogo";
     }
     criarCampoMinado(nivel, cor, vida);
     jogoIniciado = true;
 }
 
 function continuarJogo() {
-    // TODO criar funcionalidade
+    exibeTabuleiro = true;
+    document.getElementById('area-menu-inicial').classList.add('esconder');
+    document.getElementById('area-jogo').classList.remove('esconder');
 }
 
-function retornarMenuPrincipal() {
+function salvarJogo() {
     exibeTabuleiro = false;
     document.getElementById('area-jogo').classList.add('esconder');
     document.getElementById('area-menu-inicial').classList.remove('esconder');
@@ -36,6 +47,7 @@ function jogar(posicaoJogada) {
     if (!campoMinado.tabuleiro[posicaoJogada].aberta && !bloqueiaTabuleiroFimDeJogo) {
         var jogadaValida = true;
         campoMinado.tabuleiro[posicaoJogada].aberta = true;
+        removerCorAoAbrirCelula(posicaoJogada);
         if (primeiraJogada) {
             posicionarBombas(posicaoJogada);
             primeiraJogada = false;
@@ -47,8 +59,7 @@ function jogar(posicaoJogada) {
                 var td = document.getElementById(posicaoJogada);
                 td.append("B"); // TODO Adicionar imagem de bomba
                 if (campoMinado.vidasRestantes === 0) {
-                    bloqueiaTabuleiroFimDeJogo = true;
-                    alert("Você perdeu! Clique em reiniciar jogo para jogar novamente.");
+                    finalizarJogo(false, false);
                 }
             } else {
                 exibirBombasProximasCodigo(posicaoJogada);
@@ -59,12 +70,33 @@ function jogar(posicaoJogada) {
                 abrirCasasProximasDeCelula(campoMinado.tabuleiro[posicaoJogada]);
             }
             if (campoMinado.celulasSemBombaReveladas === campoMinado.nivel.celulasSemBomba) {
-                bloqueiaTabuleiroFimDeJogo = true;
-                alert("Parabéns! Você venceu o jogo! Clique em reiniciar jogo para jogar novamente.");
+                finalizarJogo(true, false);
             }
         }
     }
     // TODO Desbloqueia jogada simultânea
+}
+
+function desistir () {
+    finalizarJogo(false, true);
+}
+
+function finalizarJogo(vencedor, desistencia) {
+    document.getElementById('botao-continuar').classList.add('esconder');
+    bloqueiaTabuleiroFimDeJogo = true;
+    jogoIniciado = false;
+    textoSalvarJogo.nodeValue = "Voltar a página inicial";
+    
+    if (desistencia) {
+        document.getElementById('area-jogo').classList.add('esconder');
+        document.getElementById('area-menu-inicial').classList.remove('esconder');
+    }
+    else if (vencedor) {
+        alert("Parabéns! Você venceu o jogo! Clique em reiniciar jogo para jogar novamente.");
+    } else {
+        alert("Você perdeu! Clique em reiniciar jogo para jogar novamente.");
+    }
+
 }
 
 function abrirCasasProximasDeCelula(celula) {
@@ -82,6 +114,7 @@ function exibirBombasProximasLinhaColuna(linha, coluna) {
     var celula = buscarCelulaPorPosicao(linha, coluna);
     if (celula && !celula.aberta) {
         celula.aberta = true;
+        removerCorAoAbrirCelula(celula.codigo);
         exibirBombasProximasCodigo(celula.codigo);
         if (celula.bombasProximas === 0) {
             abrirCasasProximasDeCelula(celula);
@@ -89,10 +122,17 @@ function exibirBombasProximasLinhaColuna(linha, coluna) {
     }
 }
 
+function removerCorAoAbrirCelula(codigo) {
+    var td = document.getElementById(codigo);
+    td.classList.remove(corCelulas);
+}
+
 function exibirBombasProximasCodigo(codigo) {
     campoMinado.celulasSemBombaReveladas++;
     var td = document.getElementById(codigo);
-    td.append(document.createTextNode(campoMinado.tabuleiro[codigo].bombasProximas)); // TODO Não exibir 0
+    if (campoMinado.tabuleiro[codigo].bombasProximas) {
+        td.append(document.createTextNode(campoMinado.tabuleiro[codigo].bombasProximas));
+    }
 }
 
 function posicionarBombas(posicaoJogada) {
@@ -178,15 +218,16 @@ function criarNivel(codigo) {
         return new Nivel(7, 7, 7, 5, false);
     }
     else if (codigo === 'MEDIO') {
-        return new Nivel(10, 10, 10, 1, false);
+        return new Nivel(10, 10, 13, 1, false);
     }
     else { // DIFICIL
-        return new Nivel(15, 15, 15, 1, false);
+        return new Nivel(15, 15, 30, 1, false);
     }
 }
 
 function criarCampoMinado(nivel, cor, vidas) {
     var areaTabuleiro = document.getElementById('espaco-tabuleiro');
+    corCelulas = cor;
     var tabela = document.createElement('table');
     tabela.setAttribute('border', '1');
     var tbody = document.createElement('tbody');
@@ -198,7 +239,7 @@ function criarCampoMinado(nivel, cor, vidas) {
             var td = document.createElement('td');
             campoMinado.tabuleiro[contador] = new Celula(contador, 0, i, j, false, false);
             td.setAttribute('id', contador);
-            td.setAttribute('class', 'celula');
+            td.setAttribute('class', 'celula ' + corCelulas);
             td.onclick = function () {
                 jogar(parseInt(this.id));
             }
@@ -212,7 +253,6 @@ function criarCampoMinado(nivel, cor, vidas) {
     tabela.setAttribute('id', 'tabuleiro');
     areaTabuleiro.appendChild(tabela);
 }
-
 
 class Nivel {
     constructor(linhas, colunas, bombas, dicas, personalizado) {
@@ -229,10 +269,10 @@ class CampoMinado {
     constructor(nivel, cor, vidas, tabuleiro) {
         this.nivel = nivel;
         this.cor = cor;
-        this.vidas = vidas || 1;
+        this.vidas = parseInt(vidas);
         this.tabuleiro = tabuleiro;
         this.celulasSemBombaReveladas = 0;
-        this.vidasRestantes = vidas || 1;
+        this.vidasRestantes = parseInt(vidas);
     }
 }
 
