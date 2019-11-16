@@ -12,6 +12,11 @@ body {
     text-align: center;
 }
 
+.imagem-bomba {
+    max-width: 40px;
+    max-height: 40px;
+}
+
 .azul {
     background-color: blue;
 }

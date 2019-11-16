@@ -39,7 +39,9 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Efeito de explosão;
 - Melhorar cores personalizadas;
 - Exibir contagem de casas que faltam ser abertas;
-- Alterar cor de células abertas para ser diferente do fundo.
+- Alterar cor de células abertas para ser diferente do fundo;
+- Bloquear jogada simultânea;
+- Implementar dicas.
 
 ## Bugs a corrigir:
 Sem bugs conhecidos no momento.

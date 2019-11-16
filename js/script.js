@@ -57,9 +57,9 @@ function jogar(posicaoJogada) {
             if (campoMinado.tabuleiro[posicaoJogada].bomba) {
                 jogadaValida = false;
                 campoMinado.vidasRestantes--;
-                var td = document.getElementById(posicaoJogada);
-                td.append("B"); // TODO Adicionar imagem de bomba
+                adicionarImagemBomba(posicaoJogada);
                 if (campoMinado.vidasRestantes === 0) {
+                    mostrarTodasBombas();
                     finalizarJogo(false, false);
                 }
             } else {
@@ -80,6 +80,22 @@ function jogar(posicaoJogada) {
 
 function desistir() {
     finalizarJogo(false, true);
+}
+
+function adicionarImagemBomba(posicaoJogada) {
+    var td = document.getElementById(posicaoJogada);
+    var img = document.createElement("img");
+    img.src = "../img/bomba.jpg";
+    img.classList.add("imagem-bomba");
+    td.append(img);
+}
+
+function mostrarTodasBombas() {
+    for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
+        if (!campoMinado.tabuleiro[i].aberta && campoMinado.tabuleiro[i].bomba) {
+            adicionarImagemBomba(i);
+        }
+    }
 }
 
 function finalizarJogo(vencedor, desistencia) {
