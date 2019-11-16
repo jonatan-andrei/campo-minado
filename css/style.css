@@ -1,6 +1,7 @@
 body {
     background-color: #DCDCDC;
     margin: 20px;
+    background-blend-mode: overlay;
 }
 
 .area-menu-inicial {
@@ -29,7 +30,7 @@ body {
     margin-left: 25px;
 }
 
-.area-infos-jogo {
+.area-infos-jogo-itens {
     margin-bottom: 5px;
     text-align: center;
 }
