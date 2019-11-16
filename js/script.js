@@ -21,7 +21,7 @@ function iniciarJogo() {
             return;
         }
     }
-    document.getElementById('botao-continuar').classList.remove('esconder');
+    document.getElementById("botao-continuar").disabled = false;
     document.getElementById('area-dicas').classList.add('esconder');
     document.getElementById('aviso-resultado').classList.add('esconder');
     jogoFinalizadoComVencedor = false;
@@ -118,7 +118,7 @@ function desistir() {
 }
 
 function finalizarJogo(vencedor, desistencia) {
-    document.getElementById('botao-continuar').classList.add('esconder');
+    document.getElementById("botao-continuar").disabled = true;
     document.getElementById('area-dicas').classList.add('esconder');
     document.getElementById('area-tempo').classList.add('esconder');
     bloqueiaTabuleiroFimDeJogo = true;
@@ -143,6 +143,7 @@ function finalizarJogo(vencedor, desistencia) {
 
 function adicionarImagemBomba(posicaoJogada) {
     var td = document.getElementById(posicaoJogada);
+    td.classList.remove('celula-fechada');
     var img = document.createElement("img");
     img.src = "../img/bomba.jpg";
     img.classList.add("imagem-bomba");
@@ -205,6 +206,7 @@ function exibirBombasProximasLinhaColuna(linha, coluna) {
 function removerCorAoAbrirCelula(codigo) {
     var td = document.getElementById(codigo);
     td.classList.remove(corCelulas);
+    td.classList.remove('celula-fechada');
 }
 
 function exibirBombasProximasCodigo(codigo) {
@@ -318,7 +320,7 @@ function criarCampoMinado(nivel, cor, vidas) {
             var td = document.createElement('td');
             campoMinado.tabuleiro[contador] = new Celula(contador, 0, i, j, false, false);
             td.setAttribute('id', contador);
-            td.setAttribute('class', 'celula ' + corCelulas);
+            td.setAttribute('class', 'celula celula-fechada ' + corCelulas);
             td.onclick = function () {
                 jogar(parseInt(this.id));
             }
@@ -334,7 +336,7 @@ function criarCampoMinado(nivel, cor, vidas) {
 }
 
 function iniciarContador() {
-    document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: 0 segundos";
+    document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: 0 segundos.";
     document.getElementById('area-tempo').classList.remove('esconder');
     var momentoInicioJogo = new Date().getTime();
     var calculoTempo = setInterval(function () {
@@ -342,7 +344,7 @@ function iniciarContador() {
         var diferenca = momentoAtual - momentoInicioJogo;
         var segundos = (diferenca / 1000);
         contadorTempo = parseInt(segundos);
-        document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: " + contadorTempo + " segundos";
+        document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: " + contadorTempo + " segundos.";
         if (jogoFinalizadoComVencedor) {
             if (!recordeTempo || segundos < recordeTempo) {
                 recordeTempo = parseInt(segundos);

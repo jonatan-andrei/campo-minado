@@ -13,58 +13,69 @@
 </head>
 
 <body>
-    <div id="area-menu-inicial">
-        <span>Nível: </span>
-        <select id="nivel">
-            <option value="FACIL">Fácil</option>
-            <option value="MEDIO" selected="selected">Médio</option>
-            <option value="DIFICIL">Difícil</option>
-        </select>
-        <span>Vidas: </span>
-        <select id="vidas">
-            <option value="1" selected="selected">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
-        <span>Cor: </span>
-        <select id="cor">
-            <option value="azul" selected="selected">Azul</option>
-            <option value="verde">Verde</option>
-            <option value="vermelho">Vermelho</option>
-            <option value="laranja">Laranja</option>
-        </select>
-        <span>Imagem de fundo: </span>
-        <input type="text" id='imagem-fundo'>
-        <button onclick="iniciarJogo()">
-            Iniciar jogo
-        </button>
-        <button id="botao-continuar" class="esconder" onclick="continuarJogo()">
-            Continuar jogo
-        </button>
+    <h1 class="titulo-jogo">Campo Minado</h1>
+    <div class="area-menu-inicial">
+        <div id="area-menu-inicial">
+            <div class="form-group">
+                <label for="nivel">Nível: </label>
+                <select id="nivel" class="form-control">
+                    <option value="FACIL">Fácil</option>
+                    <option value="MEDIO" selected="selected">Médio</option>
+                    <option value="DIFICIL">Difícil</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="vidas">Vidas: </label>
+                <select id="vidas" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cor">Cor: </label>
+                <select id="cor" class="form-control">
+                    <option value="azul" selected="selected">Azul</option>
+                    <option value="verde">Verde</option>
+                    <option value="vermelho">Vermelho</option>
+                    <option value="laranja">Laranja</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="imagem-fundo">Imagem de fundo (link): </label>
+                <input type="text" id='imagem-fundo' class="form-control">
+            </div>
+            <button class="btn btn-success" onclick="iniciarJogo()">
+                Iniciar jogo
+            </button>
+            <button id="botao-continuar" class="btn btn-secondary" disabled onclick="continuarJogo()">
+                Continuar jogo
+            </button>
+        </div>
     </div>
     <div id="area-jogo" class="esconder">
         <div id="espaco-tabuleiro"></div>
-        <button id="botao-salvar" onclick="salvarJogo()"></button>
-        <button onclick="iniciarJogo()">
-            Reiniciar jogo
-        </button>
-        <button id="botao-desistir" onclick="desistir()">Desistir</button>
-        <div id="area-vidas-restantes">
-        </div>
-        <div id="area-posicoes-restantes">
-        </div>
-        <div id="area-dicas">
-            <span id="contagem-dicas"></span>
-            <button id="botao-dicas" onclick="darDica()">Dica</button>
-        </div>
-        <div id="area-tempo">
-            <div id="contador-tempo">
+        <div class="area-infos-jogo">
+            <button id="botao-salvar" class="btn btn-success area-infos-jogo" onclick="salvarJogo()"></button>
+            <button class="btn btn-warning area-infos-jogo" onclick="iniciarJogo()">Reiniciar jogo</button>
+            <button id="botao-desistir" class="btn btn-danger area-infos-jogo" onclick="desistir()">Desistir</button>
+            <div id="area-vidas-restantes" class="area-infos-jogo">
             </div>
-            <div id="recorde-tempo">
+            <div id="area-posicoes-restantes" class="area-infos-jogo">
+            </div>
+            <div id="area-dicas" class="area-infos-jogo">
+                <span id="contagem-dicas"></span>
+                <button id="botao-dicas" class="btn btn-info" onclick="darDica()">Dica</button>
+            </div>
+            <div id="area-tempo" class="area-infos-jogo">
+                <div id="contador-tempo">
+                </div>
+                <div id="recorde-tempo" class="area-infos-jogo">
+                </div>
             </div>
         </div>
-    </div>
-    <div id="aviso-resultado">
+        <div id="aviso-resultado">
+        </div>
     </div>
 </body>
 

@@ -1,21 +1,57 @@
 body {
     background-color: #DCDCDC;
+    margin: 20px;
+}
+
+.area-menu-inicial {
+    margin: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo-jogo {
+    font-family: "Comic Sans MS";
+    color: blue;
+    text-align: center;
+    font-weight: bold;
+}
+
+#area-jogo {
+    display: flex;
+    justify-content: center;
+}
+
+.area-infos-jogo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+}
+
+.area-infos-jogo {
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .esconder {
-    display: none; 
+    display: none !important;
 }
 
 .celula {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     text-align: center;
     background-color: #DCDCDC;
 }
 
+.celula-fechada:hover {
+    opacity: 60%;
+}
+
 .imagem-bomba {
-    max-width: 40px;
-    max-height: 40px;
+    max-width: 35px;
+    max-height: 35px;
 }
 
 .azul {
