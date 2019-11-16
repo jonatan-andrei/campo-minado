@@ -7,9 +7,25 @@ var campoMinado = null;
 var bloqueiaTabuleiroFimDeJogo = false;
 var corCelulas = 'azul';
 var textoSalvarJogo = document.createTextNode("Salvar jogo");
+var textoDicas = document.createTextNode("0 dicas restantes");
+var jogoFinalizado = false;
+var jogoFinalizadoComVencedor = false;
+var recordeTempo = null;
+var momentoInicioJogo = null;
+var contadorTempo = 0;
 
 function iniciarJogo() {
+    if (jogoIniciado) {
+        var confirmacaoRemoverJogo = confirm("Ao iniciar um novo jogo, você perderá sua partida salva! Continuar?");
+        if (!confirmacaoRemoverJogo) {
+            return;
+        }
+    }
     document.getElementById('botao-continuar').classList.remove('esconder');
+    document.getElementById('area-dicas').classList.add('esconder');
+    document.getElementById('aviso-resultado').classList.add('esconder');
+    jogoFinalizadoComVencedor = false;
+    jogoFinalizado = false;
     primeiraJogada = true;
     exibeTabuleiro = true;
     bloqueiaTabuleiroFimDeJogo = false;
@@ -18,17 +34,35 @@ function iniciarJogo() {
     var nivel = criarNivel(document.getElementById('nivel').value);
     var cor = document.getElementById('cor').value;
     var vida = document.getElementById('vidas').value;
+    var body = document.getElementsByTagName('body')[0];
+    var imagemFundo = document.getElementById('imagem-fundo').value;
+    if (imagemFundo) {
+        body.style.backgroundImage = 'url(' + imagemFundo + ')';
+    } else {
+        body.style.backgroundImage = '';
+    }
     if (primeiroJogo) {
         var botaoSalvar = document.getElementById('botao-salvar');
         botaoSalvar.append(textoSalvarJogo);
+        var spanDicas = document.getElementById('contagem-dicas');
+        spanDicas.append(textoDicas);
         primeiroJogo = false;
     } else {
         document.getElementById('tabuleiro').remove();
         textoSalvarJogo.nodeValue = "Salvar jogo";
-        // Desbloquear botão desistir
+        document.getElementById("botao-desistir").disabled = false;
     }
     criarCampoMinado(nivel, cor, vida);
     jogoIniciado = true;
+    iniciarContador();
+    document.getElementById("area-posicoes-restantes").innerHTML = "Faltam: " + (campoMinado.nivel.celulasSemBomba - campoMinado.celulasSemBombaReveladas) + " posições";
+    document.getElementById("area-vidas-restantes").innerHTML = "Vidas restantes: " + campoMinado.vidasRestantes;
+    if (recordeTempo) {
+        document.getElementById('recorde-tempo').classList.remove('esconder');
+        document.getElementById("recorde-tempo").innerHTML = "Recorde de tempo: " + recordeTempo + " segundos.";
+    } else {
+        document.getElementById('recorde-tempo').classList.add('esconder');
+    }
 }
 
 function continuarJogo() {
@@ -44,7 +78,6 @@ function salvarJogo() {
 }
 
 function jogar(posicaoJogada) {
-    // TODO Bloqueia jogada simultânea
     if (!campoMinado.tabuleiro[posicaoJogada].aberta && !bloqueiaTabuleiroFimDeJogo) {
         var jogadaValida = true;
         campoMinado.tabuleiro[posicaoJogada].aberta = true;
@@ -53,13 +86,15 @@ function jogar(posicaoJogada) {
             posicionarBombas(posicaoJogada);
             primeiraJogada = false;
             exibirBombasProximasCodigo(posicaoJogada);
+            atualizarDicas();
         } else {
             if (campoMinado.tabuleiro[posicaoJogada].bomba) {
                 jogadaValida = false;
                 campoMinado.vidasRestantes--;
-                var td = document.getElementById(posicaoJogada);
-                td.append("B"); // TODO Adicionar imagem de bomba
+                document.getElementById("area-vidas-restantes").innerHTML = "Vidas restantes: " + campoMinado.vidasRestantes;
+                adicionarImagemBomba(posicaoJogada);
                 if (campoMinado.vidasRestantes === 0) {
+                    mostrarTodasBombas();
                     finalizarJogo(false, false);
                 }
             } else {
@@ -70,12 +105,12 @@ function jogar(posicaoJogada) {
             if (campoMinado.tabuleiro[posicaoJogada].bombasProximas === 0) {
                 abrirCasasProximasDeCelula(campoMinado.tabuleiro[posicaoJogada]);
             }
+            document.getElementById("area-posicoes-restantes").innerHTML = "Faltam: " + (campoMinado.nivel.celulasSemBomba - campoMinado.celulasSemBombaReveladas) + " posições";
             if (campoMinado.celulasSemBombaReveladas === campoMinado.nivel.celulasSemBomba) {
                 finalizarJogo(true, false);
             }
         }
     }
-    // TODO Desbloqueia jogada simultânea
 }
 
 function desistir() {
@@ -84,20 +119,64 @@ function desistir() {
 
 function finalizarJogo(vencedor, desistencia) {
     document.getElementById('botao-continuar').classList.add('esconder');
+    document.getElementById('area-dicas').classList.add('esconder');
+    document.getElementById('area-tempo').classList.add('esconder');
     bloqueiaTabuleiroFimDeJogo = true;
     jogoIniciado = false;
     textoSalvarJogo.nodeValue = "Voltar a página inicial";
-    // Bloquear botão desistir
+    document.getElementById("botao-desistir").disabled = true;
 
     if (desistencia) {
         document.getElementById('area-jogo').classList.add('esconder');
         document.getElementById('area-menu-inicial').classList.remove('esconder');
     }
     else if (vencedor) {
-        alert("Parabéns! Você venceu o jogo! Clique em reiniciar jogo para jogar novamente.");
+        jogoFinalizadoComVencedor = true;
+        var mensagemVitoria = "Parabéns! Você venceu o jogo! Em: " + contadorTempo + " segundos. ";
+        var mensagemVitoria = mensagemVitoria + "Clique em reiniciar jogo para jogar novamente.";
+        exibirAreaAviso('verde', mensagemVitoria);
     } else {
-        alert("Você perdeu! Clique em reiniciar jogo para jogar novamente.");
+        exibirAreaAviso('vermelho', "Você perdeu! Clique em reiniciar jogo para jogar novamente.");
     }
+    jogoFinalizado = true;
+}
+
+function adicionarImagemBomba(posicaoJogada) {
+    var td = document.getElementById(posicaoJogada);
+    var img = document.createElement("img");
+    img.src = "../img/bomba.jpg";
+    img.classList.add("imagem-bomba");
+    td.append(img);
+}
+
+function mostrarTodasBombas() {
+    for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
+        if (!campoMinado.tabuleiro[i].aberta && campoMinado.tabuleiro[i].bomba) {
+            adicionarImagemBomba(i);
+        }
+    }
+}
+
+function atualizarDicas() {
+    if (campoMinado.nivel.dicas === 0) {
+        document.getElementById('area-dicas').classList.add('esconder');
+    } else {
+        document.getElementById('area-dicas').classList.remove('esconder');
+        textoDicas.nodeValue = campoMinado.nivel.dicas + " dica(s) restante(s)";
+    }
+}
+
+function darDica() {
+    campoMinado.nivel.dicas--;
+    var dicaValida = false;
+    do {
+        var posicao = sortearNumero();
+        if (!campoMinado.tabuleiro[posicao].bomba && !campoMinado.tabuleiro[posicao].aberta) {
+            jogar(posicao);
+            dicaValida = true;
+        }
+    } while (!dicaValida);
+    atualizarDicas();
 }
 
 function abrirCasasProximasDeCelula(celula) {
@@ -183,7 +262,6 @@ function verificarBomba(celula) {
 }
 
 function buscarCelulaPorPosicao(linha, coluna) {
-    // TODO verificar maneira melhor de fazer essa busca
     for (var i = 1; i < campoMinado.tabuleiro.length; i++) {
         if (campoMinado.tabuleiro[i].linha === linha && campoMinado.tabuleiro[i].coluna === coluna) {
             return campoMinado.tabuleiro[i];
@@ -216,13 +294,13 @@ function sortearNumero() {
 
 function criarNivel(codigo) {
     if (codigo === 'FACIL') {
-        return new Nivel(10, 10, 10, 5, false);
+        return new Nivel(10, 10, 10, 3, false);
     }
     else if (codigo === 'MEDIO') {
         return new Nivel(15, 15, 20, 1, false);
     }
     else { // DIFICIL
-        return new Nivel(20, 20, 40, 1, false);
+        return new Nivel(20, 20, 40, 0, false);
     }
 }
 
@@ -255,12 +333,41 @@ function criarCampoMinado(nivel, cor, vidas) {
     areaTabuleiro.appendChild(tabela);
 }
 
+function iniciarContador() {
+    document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: 0 segundos";
+    document.getElementById('area-tempo').classList.remove('esconder');
+    var momentoInicioJogo = new Date().getTime();
+    var calculoTempo = setInterval(function () {
+        var momentoAtual = new Date().getTime();
+        var diferenca = momentoAtual - momentoInicioJogo;
+        var segundos = (diferenca / 1000);
+        contadorTempo = parseInt(segundos);
+        document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: " + contadorTempo + " segundos";
+        if (jogoFinalizadoComVencedor) {
+            if (!recordeTempo || segundos < recordeTempo) {
+                recordeTempo = parseInt(segundos);
+            }
+        }
+        if (jogoFinalizado) {
+            clearInterval(calculoTempo);
+        }
+    }, 1000);
+}
+
+function exibirAreaAviso(cor, mensagem) {
+    document.getElementById('aviso-resultado').classList.remove('vermelho');
+    document.getElementById('aviso-resultado').classList.remove('verde');
+    document.getElementById('aviso-resultado').classList.add(cor);
+    document.getElementById("aviso-resultado").innerHTML = mensagem;
+    document.getElementById('aviso-resultado').classList.remove('esconder');
+}
+
 class Nivel {
     constructor(linhas, colunas, bombas, dicas, personalizado) {
         this.linhas = linhas;
         this.colunas = colunas;
         this.bombas = bombas;
-        this.dicas = dicas; // TODO implementar dicas
+        this.dicas = dicas;
         this.personalizado = personalizado;
         this.celulasSemBomba = (linhas * colunas) - bombas;
     }

@@ -33,6 +33,8 @@
             <option value="vermelho">Vermelho</option>
             <option value="laranja">Laranja</option>
         </select>
+        <span>Imagem de fundo: </span>
+        <input type="text" id='imagem-fundo'>
         <button onclick="iniciarJogo()">
             Iniciar jogo
         </button>
@@ -46,7 +48,23 @@
         <button onclick="iniciarJogo()">
             Reiniciar jogo
         </button>
-        <button onclick="desistir()">Desistir</button>
+        <button id="botao-desistir" onclick="desistir()">Desistir</button>
+        <div id="area-vidas-restantes">
+        </div>
+        <div id="area-posicoes-restantes">
+        </div>
+        <div id="area-dicas">
+            <span id="contagem-dicas"></span>
+            <button id="botao-dicas" onclick="darDica()">Dica</button>
+        </div>
+        <div id="area-tempo">
+            <div id="contador-tempo">
+            </div>
+            <div id="recorde-tempo">
+            </div>
+        </div>
+    </div>
+    <div id="aviso-resultado">
     </div>
 </body>
 

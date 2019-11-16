@@ -10,6 +10,12 @@ body {
     width: 40px;
     height: 40px;
     text-align: center;
+    background-color: #DCDCDC;
+}
+
+.imagem-bomba {
+    max-width: 40px;
+    max-height: 40px;
 }
 
 .azul {
@@ -27,3 +33,12 @@ body {
 .laranja {
     background-color: orange;
 }
+
+#aviso-resultado {
+    position: fixed;
+    left: 0;
+    top: 0; 
+    width: 100%;
+    color: white;
+    text-align: center;
+  }
