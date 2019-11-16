@@ -24,24 +24,21 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Escolher “nível” de dificuldade.
 
 ## Funcionalidades "pendentes" (a fazer):
-- Separar classes de script principal;
-- Adicionar imagem de bomba;
-- Adicionar animação para explodir bombas e adicionar depois aviso;
+#### Mecânica do jogo:
 - Criar confirmação para iniciar jogo caso tenha outro jogo iniciado;
-- Bloquear e desbloquear botão desistir;
+- Exibir contagem de casas que faltam ser abertas;
 - Contagem e recorde de tempo;
-- Criar alerts bonitos para vitória e derrota;
-- Adicionar efeito ao passar o mouse e retirar em células abertas;
+- Criar tabuleiro personalizado (linhas, colunas, bombas e dicas);
+- Escolher imagem de fundo;
+- Exibir vidas restantes.
+
+#### Estilo do jogo:
 - Criar estilo da página inicial;
 - Criar estilo da página de tabuleiro;
-- Criar tabuleiro personalizado (linhas, colunas e bombas);
-- Escolher imagem de fundo;
-- Efeito de explosão;
-- Melhorar cores personalizadas;
-- Exibir contagem de casas que faltam ser abertas;
 - Alterar cor de células abertas para ser diferente do fundo;
-- Bloquear jogada simultânea;
-- Implementar dicas.
+- Melhorar cores personalizadas;
+- Adicionar efeito ao passar o mouse e retirar em células abertas;
+- Adicionar animação para explodir bombas e adicionar depois aviso.
 
 ## Bugs a corrigir:
-Sem bugs conhecidos no momento.
+- Corrigir cor de mensagem de vitória.

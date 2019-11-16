@@ -32,3 +32,13 @@ body {
 .laranja {
     background-color: orange;
 }
+
+#aviso-resultado {
+    position: fixed;
+    left: 0;
+    top: 0; 
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+  }
