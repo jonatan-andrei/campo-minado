@@ -42,6 +42,8 @@ function iniciarJogo() {
     criarCampoMinado(nivel, cor, vida);
     jogoIniciado = true;
     iniciarContador();
+    document.getElementById("area-posicoes-restantes").innerHTML = "Faltam: " + (campoMinado.nivel.celulasSemBomba - campoMinado.celulasSemBombaReveladas) + " posições";
+    document.getElementById("area-vidas-restantes").innerHTML = "Vidas restantes: " + campoMinado.vidasRestantes;
     if (recordeTempo) {
         document.getElementById('recorde-tempo').classList.remove('esconder');
         document.getElementById("recorde-tempo").innerHTML = "Recorde de tempo: " + recordeTempo + " segundos.";
@@ -76,6 +78,7 @@ function jogar(posicaoJogada) {
             if (campoMinado.tabuleiro[posicaoJogada].bomba) {
                 jogadaValida = false;
                 campoMinado.vidasRestantes--;
+                document.getElementById("area-vidas-restantes").innerHTML = "Vidas restantes: " + campoMinado.vidasRestantes;
                 adicionarImagemBomba(posicaoJogada);
                 if (campoMinado.vidasRestantes === 0) {
                     mostrarTodasBombas();
@@ -89,6 +92,7 @@ function jogar(posicaoJogada) {
             if (campoMinado.tabuleiro[posicaoJogada].bombasProximas === 0) {
                 abrirCasasProximasDeCelula(campoMinado.tabuleiro[posicaoJogada]);
             }
+            document.getElementById("area-posicoes-restantes").innerHTML = "Faltam: " + (campoMinado.nivel.celulasSemBomba - campoMinado.celulasSemBombaReveladas) + " posições";
             if (campoMinado.celulasSemBombaReveladas === campoMinado.nivel.celulasSemBomba) {
                 finalizarJogo(true, false);
             }
