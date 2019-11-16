@@ -24,11 +24,6 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Escolher “nível” de dificuldade.
 
 ## Funcionalidades "pendentes" (a fazer):
-#### Mecânica do jogo:
-- Criar confirmação para iniciar jogo caso tenha outro jogo iniciado;
-- Escolher imagem de fundo;
-
-#### Estilo do jogo:
 - Criar estilo da página inicial;
 - Criar estilo da página de tabuleiro;
 - Alterar cor de células abertas para ser diferente do fundo;

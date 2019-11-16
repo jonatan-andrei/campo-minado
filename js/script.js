@@ -15,6 +15,12 @@ var momentoInicioJogo = null;
 var contadorTempo = 0;
 
 function iniciarJogo() {
+    if (jogoIniciado) {
+        var confirmacaoRemoverJogo = confirm("Ao iniciar um novo jogo, você perderá sua partida salva! Continuar?");
+        if (!confirmacaoRemoverJogo) {
+            return;
+        }
+    }
     document.getElementById('botao-continuar').classList.remove('esconder');
     document.getElementById('area-dicas').classList.add('esconder');
     document.getElementById('aviso-resultado').classList.add('esconder');
@@ -28,6 +34,13 @@ function iniciarJogo() {
     var nivel = criarNivel(document.getElementById('nivel').value);
     var cor = document.getElementById('cor').value;
     var vida = document.getElementById('vidas').value;
+    var body = document.getElementsByTagName('body')[0];
+    var imagemFundo = document.getElementById('imagem-fundo').value;
+    if (imagemFundo) {
+        body.style.backgroundImage = 'url(' + imagemFundo + ')';
+    } else {
+        body.style.backgroundImage = '';
+    }
     if (primeiroJogo) {
         var botaoSalvar = document.getElementById('botao-salvar');
         botaoSalvar.append(textoSalvarJogo);
