@@ -20,6 +20,4 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Contagem e recorde de tempo;
 - Escolher cor do tabuleiro;
 - Escolher se haverá vidas;
-- Escolher tamanho do tabuleiro (casas laterais e horizontais);
-- Escolher número de bombas;
-- Escolher “nível” de dificuldade.
+- Escolher “nível” de dificuldade (casas horizontais e laterais e número de bombas).
