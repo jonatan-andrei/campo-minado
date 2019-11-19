@@ -1,4 +1,4 @@
-# campo-minado
+# Campo Minado
 
 ## Integrantes do grupo:
 - Jonatan Andrei Haas
