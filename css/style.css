@@ -71,10 +71,18 @@ body {
     border-color: #00CC00;
 }
 
+.vermelho-aviso {
+    background-color: #D22118;
+}
+
 .verde {
     background-color: green;
     border-style: solid;
     border-color: red;
+}
+
+.verde-aviso {
+    background-color: green;
 }
 
 .laranja {

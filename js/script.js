@@ -138,9 +138,9 @@ function finalizarJogo(vencedor, desistencia) {
         jogoFinalizadoComVencedor = true;
         var mensagemVitoria = "Parabéns! Você venceu o jogo! Em: " + contadorTempo + " segundos. ";
         var mensagemVitoria = mensagemVitoria + "Clique em reiniciar jogo para jogar novamente.";
-        exibirAreaAviso('verde', mensagemVitoria);
+        exibirAreaAviso('verde-aviso', mensagemVitoria);
     } else {
-        exibirAreaAviso('vermelho', "Você perdeu! Clique em reiniciar jogo para jogar novamente.");
+        exibirAreaAviso('vermelho-aviso', "Você perdeu! Clique em reiniciar jogo para jogar novamente.");
     }
     clearInterval(calculoTempo);
 }
@@ -358,8 +358,8 @@ function iniciarContador() {
 }
 
 function exibirAreaAviso(cor, mensagem) {
-    document.getElementById('aviso-resultado').classList.remove('vermelho');
-    document.getElementById('aviso-resultado').classList.remove('verde');
+    document.getElementById('aviso-resultado').classList.remove('vermelho-aviso');
+    document.getElementById('aviso-resultado').classList.remove('verde-aviso');
     document.getElementById('aviso-resultado').classList.add(cor);
     document.getElementById("aviso-resultado").innerHTML = mensagem;
     document.getElementById('aviso-resultado').classList.remove('esconder');
