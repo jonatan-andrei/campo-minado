@@ -8,11 +8,11 @@ var bloqueiaTabuleiroFimDeJogo = false;
 var corCelulas = 'azul';
 var textoSalvarJogo = document.createTextNode("Salvar jogo");
 var textoDicas = document.createTextNode("0 dicas restantes");
-var jogoFinalizado = false;
 var jogoFinalizadoComVencedor = false;
 var recordeTempo = null;
 var momentoInicioJogo = null;
 var contadorTempo = 0;
+var calculoTempo;
 
 function iniciarJogo() {
     if (jogoIniciado) {
@@ -25,7 +25,6 @@ function iniciarJogo() {
     document.getElementById('area-dicas').classList.add('esconder');
     document.getElementById('aviso-resultado').classList.add('esconder');
     jogoFinalizadoComVencedor = false;
-    jogoFinalizado = false;
     primeiraJogada = true;
     exibeTabuleiro = true;
     bloqueiaTabuleiroFimDeJogo = false;
@@ -63,6 +62,11 @@ function iniciarJogo() {
     } else {
         document.getElementById('recorde-tempo').classList.add('esconder');
     }
+}
+
+function reiniciarJogo() {
+    clearInterval(calculoTempo);
+    iniciarJogo();
 }
 
 function continuarJogo() {
@@ -138,7 +142,7 @@ function finalizarJogo(vencedor, desistencia) {
     } else {
         exibirAreaAviso('vermelho', "Você perdeu! Clique em reiniciar jogo para jogar novamente.");
     }
-    jogoFinalizado = true;
+    clearInterval(calculoTempo);
 }
 
 function adicionarImagemBomba(posicaoJogada) {
@@ -339,7 +343,7 @@ function iniciarContador() {
     document.getElementById("contador-tempo").innerHTML = "Tempo de jogo: 0 segundos.";
     document.getElementById('area-tempo').classList.remove('esconder');
     var momentoInicioJogo = new Date().getTime();
-    var calculoTempo = setInterval(function () {
+    calculoTempo = setInterval(function () {
         var momentoAtual = new Date().getTime();
         var diferenca = momentoAtual - momentoInicioJogo;
         var segundos = (diferenca / 1000);
@@ -349,9 +353,6 @@ function iniciarContador() {
             if (!recordeTempo || segundos < recordeTempo) {
                 recordeTempo = parseInt(segundos);
             }
-        }
-        if (jogoFinalizado) {
-            clearInterval(calculoTempo);
         }
     }, 1000);
 }
