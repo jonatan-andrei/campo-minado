@@ -2,6 +2,10 @@ body {
     background-color: #DCDCDC;
     margin: 20px;
     background-blend-mode: overlay;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+    height:100vh;
 }
 
 .area-menu-inicial {
@@ -57,18 +61,26 @@ body {
 
 .azul {
     background-color: blue;
+    border-style: solid;
+    border-color: #ffBC00;
 }
 
 .vermelho {
-    background-color: red;
+    background-color: #D22118;
+    border-style: solid;
+    border-color: #00CC00;
 }
 
 .verde {
     background-color: green;
+    border-style: solid;
+    border-color: red;
 }
 
 .laranja {
     background-color: orange;
+    border-style: solid;
+    border-color: #01939A;
 }
 
 #aviso-resultado {
