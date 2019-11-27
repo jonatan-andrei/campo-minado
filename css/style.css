@@ -21,10 +21,6 @@ body {
     color: blue;
     text-align: center;
     font-weight: bold;
-    background: url(letreiro.jpg);
-    background-position: center;
-    background-size: 500px 80px;
-    background-repeat: no-repeat;
 }
 
 #area-jogo {
