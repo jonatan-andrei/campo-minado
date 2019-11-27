@@ -73,7 +73,6 @@ body {
 
 .vermelho-aviso {
     background-color: #D22118;
-    border-style: solid;
 }
 
 .verde {
@@ -84,7 +83,6 @@ body {
 
 .verde-aviso {
     background-color: green;
-    border-style: solid;
 }
 
 .laranja {
