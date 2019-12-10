@@ -21,3 +21,10 @@ A funcionalidade do jogo é a seguinte: Existe um “tabuleiro” onde, para ven
 - Escolher cor do tabuleiro;
 - Escolher se haverá vidas;
 - Escolher “nível” de dificuldade (casas horizontais e laterais e número de bombas).
+
+
+## Funcionalidades A fazer “FELIPE IBIASSSSS não JONATAN”:
+Mensagem de Vitoria e derrota mais centralizada
+melhorar a imagem
+colocar animação da bomba
+Incluir som no jogo
